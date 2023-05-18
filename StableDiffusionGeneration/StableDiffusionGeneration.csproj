@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TEMPORARY: we don't want to copy these from the microsoft.ai.directml package since we need a newer DLL for now -->
+  <PropertyGroup Label="Globals">
+    <Microsoft_AI_DirectML_SkipIncludeDir>True</Microsoft_AI_DirectML_SkipIncludeDir>
+    <Microsoft_AI_DirectML_SkipLink>True</Microsoft_AI_DirectML_SkipLink>
+    <Microsoft_AI_DirectML_SkipDebugLayerCopy>True</Microsoft_AI_DirectML_SkipDebugLayerCopy>
+    <Microsoft_AI_DirectML_SkipLibraryCopy>False</Microsoft_AI_DirectML_SkipLibraryCopy>
+    <Configurations>Debug;Release</Configurations>
+    <OnnxModelSubdir>fp16</OnnxModelSubdir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.15.0-dev-20230520-0645-ade58cf789" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Extensions" Version="0.8.0-alpha.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.0-dev-20230520-0645-ade58cf789" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\StableDiffusion.ML.OnnxRuntime\StableDiffusion.ML.OnnxRuntime.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\biaafpwi.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(SolutionDir)\x64\$(Configuration)\DirectXAdapterSelector.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Update="Onnx\$(OnnxModelSubdir)\safety_checker\model.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Onnx\$(OnnxModelSubdir)\text_encoder\model.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Onnx\$(OnnxModelSubdir)\unet\model.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Onnx\$(OnnxModelSubdir)\vae_decoder\model.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,123 @@
+﻿<Window x:Class="StableDiffusionGeneration.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StableDiffusionGeneration"
+        xmlns:localVM="clr-namespace:StableDiffusionGeneration.ViewModel"
+        mc:Ignorable="d"
+        DataContext="{Binding GeneratorViewModel, Source={x:Static localVM:ViewModelLocator.Instance}}"
+        Title="Stable Diffusion Demo" Height="530" Width="560">
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="HeaderTextBlockStyle">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Foreground" Value="#0078D7" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="10,0,10,0" />
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="InputTextBoxStyle">
+            <Setter Property="Margin" Value="10,5,10,10" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#0078D7" />
+        </Style>
+
+        <Style TargetType="Button" x:Key="ActionButtonStyle">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#0078D7" />
+        </Style>
+
+        <Style TargetType="ListBox" x:Key="ImageListBoxStyle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="#0078D7" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="0,0,0,-16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="77*"/>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Image prompt:"
+               Grid.Row="0" Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Style="{StaticResource HeaderTextBlockStyle}" />
+
+        <TextBox Grid.Column="1"
+             VerticalAlignment="Center"
+             Width="391"
+             HorizontalAlignment="Left"
+             Text="{Binding InputDescription}"
+             Style="{StaticResource InputTextBoxStyle}" Margin="119,0,0,0" />
+
+        <TextBlock Text="Number of images to generate:"
+               Grid.Row="2" Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Style="{StaticResource HeaderTextBlockStyle}" Margin="10,6,10,7" />
+
+        <TextBox Grid.Row="2" Grid.Column="1"
+             Width="35"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Center"
+             Text="{Binding NumberOfImages}"
+             Style="{StaticResource InputTextBoxStyle}" Margin="252,0,0,0" />
+
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Generate"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Command="{Binding GenerateCommand}"
+                Style="{StaticResource ActionButtonStyle}" />
+                <TextBlock Text="{Binding StatusString}" 
+                           Margin="0"
+                           VerticalAlignment="Center"
+                           Style="{StaticResource HeaderTextBlockStyle}" 
+                           Foreground="Gray"/>
+            </StackPanel>
+            <ProgressBar x:Name="progressBar"
+                         Height="19"
+                         Width="520"
+                         HorizontalAlignment="Left"
+                         Margin="10,5,10,10"
+                         Value="{Binding ProgressPercentage}"/>
+        </StackPanel>
+
+        <ListBox Grid.Row="5" Grid.ColumnSpan="2"
+             VerticalAlignment="Center"
+             Margin="10,0,20,0"
+             MinWidth="530"
+             Height="350"
+             ItemsSource="{Binding Images}"
+             Style="{StaticResource ImageListBoxStyle}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding }"
+                       Width="330" Height="330"
+                       Stretch="UniformToFill"
+                       Margin="5"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
